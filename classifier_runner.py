@@ -1,13 +1,13 @@
 import os
 import sys
 import numpy as np
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import pandas as pd
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.pipeline import Pipeline
 from sklearn.dummy import DummyClassifier
-from sklearn.naive_bayes import BernoulliNB
+from sklearn.naive_bayes import BernoulliNB, MultinomialNB
 from sklearn.linear_model import LogisticRegression, SGDClassifier, SGDRegressor, PassiveAggressiveClassifier
 from sklearn.svm import SVC, LinearSVC
 from sklearn.neural_network import MLPClassifier
@@ -39,11 +39,12 @@ vectorized_testset_data = vectorizer.transform(testing_data)
 
 CLASSIFIERS = [
     DummyClassifier(strategy='most_frequent'),  # Stratified works better than most_frequent (used for SemEval).
-    # BernoulliNB(),
-    # LogisticRegression(C=1e5),
-    # SGDClassifier(max_iter=5, tol=None),
+    BernoulliNB(),
+    MultinomialNB(),
+    LogisticRegression(C=1e5),
+    SGDClassifier(max_iter=5, tol=None),
     LinearSVC(),
-    # MLPClassifier(),
+    MLPClassifier(),
 ]
 
 f1_means = []
@@ -64,26 +65,26 @@ for i, classifier in enumerate(CLASSIFIERS):
 ################################################
 # Plot the results.
 
-_, ax = plt.subplots(figsize=(8, max(len(f1_means), 1.5)))
-y_pos = np.arange(len(f1_means))
-bars = ax.barh(y_pos, f1_means, height=0.5, align='center', xerr=f1_stds)
-ax.set_yticks(y_pos)
-ax.set_yticklabels([type(x).__name__ for x in CLASSIFIERS])
-plt.gca().invert_yaxis()
-ax.set_xlim(0.0, 1.0)
-ax.set_xlabel('Stance XVal F1-Weighted Score')
-ax.set_title('Classifiers for the SemEval 2016 Task A Dataset')
+# _, ax = plt.subplots(figsize=(8, max(len(f1_means), 1.5)))
+# y_pos = np.arange(len(f1_means))
+# bars = ax.barh(y_pos, f1_means, height=0.5, align='center', xerr=f1_stds)
+# ax.set_yticks(y_pos)
+# ax.set_yticklabels([type(x).__name__ for x in CLASSIFIERS])
+# plt.gca().invert_yaxis()
+# ax.set_xlim(0.0, 1.0)
+# ax.set_xlabel('Stance XVal F1-Weighted Score')
+# ax.set_title('Classifiers for the SemEval 2016 Task A Dataset')
 
-def autolabel(rects):
-    for rect in rects:
-        width = rect.get_width()
-        ax.text(rect.get_width() + 0.01, rect.get_y() + rect.get_height()/5.0,
-                '{:.3f}'.format(width),
-                ha='left', va='center')
-autolabel(bars)
+# def autolabel(rects):
+#     for rect in rects:
+#         width = rect.get_width()
+#         ax.text(rect.get_width() + 0.01, rect.get_y() + rect.get_height()/5.0,
+#                 '{:.3f}'.format(width),
+#                 ha='left', va='center')
+# autolabel(bars)
 
-plt.tight_layout()
-plt.show()
+# plt.tight_layout()
+# plt.show()
 
 #clf.fit(training_data, training_labels)
 
