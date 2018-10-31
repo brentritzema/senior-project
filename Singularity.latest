@@ -25,6 +25,7 @@ From: tensorflow/tensorflow:latest-gpu-py3
   mkdir -p /scratch /data /usr/bin
 
   # load in extra packages for python
+  apt-get update && apt-get install -y --no-install-recommends apt-utils
   apt-get update && apt-get -y install locales
   locale-gen en_US.UTF-8
   apt-get install -y git wget python3-dev python3-pip
