@@ -1,4 +1,5 @@
 Bootstrap: docker
 From: tensorflow/tensorflow:latest-gpu-py3
 
-
+%post
+  apt install python3.6
