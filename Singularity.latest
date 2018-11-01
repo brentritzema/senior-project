@@ -1,16 +1,4 @@
 Bootstrap: docker
 From: tensorflow/tensorflow:latest-gpu-py3
 
-%post
-  # post-setup script
-
-  # load in extra packages for python
-  apt-get update && apt-get -y install locales
-  locale-gen en_US.UTF-8
-  apt-get install -y git wget python3-tk python3-pip
-  apt-get clean
-
-  apt-get install -y libcupti-dev
-  pip3 install --upgrade pip
-  pip3 install keras
 
