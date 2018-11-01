@@ -21,15 +21,9 @@ From: tensorflow/tensorflow:latest-gpu-py3
   # make environment file executable
   chmod +x /environment
 
-  # default mount paths
-  mkdir -p /scratch /data /usr/bin
-
   # load in extra packages for python
-  apt-get update && apt-get install -y --no-install-recommends apt-utils
-  apt-get update && apt-get -y install locales
-  locale-gen en_US.UTF-8
-  apt-get install -y git wget python3-dev python3-pip
-  apt-get clean
+  apt-get update
+  apt-get install python3-tk python3-pip
 
   apt-get install -y libcupti-dev
   pip3 install --upgrade pip
