@@ -51,7 +51,7 @@ From: nvidia/cuda:9.0-base-ubuntu16.04
     python3.6 \
     
   curl -fSsL -O https://bootstrap.pypa.io/get-pip.py && \
-    python get-pip.py && \
+    python3.6 get-pip.py && \
     rm get-pip.py
 
   pip install --upgrade \
