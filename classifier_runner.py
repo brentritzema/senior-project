@@ -15,52 +15,65 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import Perceptron
 from sklearn.model_selection import cross_val_score
 from sklearn.metrics import f1_score
+
+from fire import Fire
+
 # load the data, which will be split into train and test sets
 
 # make a vectorizers which 
 
-full_training_dataset = pd.read_csv("/home/bjr33/workspace/cs/data/stance/coding/auto_trainset_tok.csv")
+def main(trainset_fp,
+         testset_fp,
+         output_fp):
+#"/home/bjr33/workspace/cs/data/stance/coding/auto_trainset_tok.csv"
+    full_training_dataset = pd.read_csv(trainset_fp)
 
-training_data = full_training_dataset['tweet_t']
-training_labels = full_training_dataset['stance']
+    training_data = full_training_dataset['tweet_t']
+    training_labels = full_training_dataset['stance']
 
-print(training_data.size)
-print(training_labels.size)
+    print(training_data.size)
+    print(training_labels.size)
+#"/home/bjr33/workspace/cs/data/stance/coding/gold_20180514_majority_fixed_tok.csv"
+    full_testing_dataset = pd.read_csv(testset_fp)
 
-full_testing_dataset = pd.read_csv("/home/bjr33/workspace/cs/data/stance/coding/gold_20180514_majority_fixed_tok.csv")
+    testing_data = full_testing_dataset['tweet_t']
+    testing_labels = full_testing_dataset['stance']
 
-testing_data = full_testing_dataset['tweet_t']
-testing_labels = full_testing_dataset['stance']
+    vectorizer = TfidfVectorizer(ngram_range=(1,3), analyzer='char', use_idf=False)
 
-vectorizer = TfidfVectorizer(ngram_range=(1,3), analyzer='char', use_idf=False)
+    vectorized_trainset_data = vectorizer.fit_transform(training_data)
+    vectorized_testset_data = vectorizer.transform(testing_data)
 
-vectorized_trainset_data = vectorizer.fit_transform(training_data)
-vectorized_testset_data = vectorizer.transform(testing_data)
+    CLASSIFIERS = [
+        DummyClassifier(strategy='most_frequent'),  # Stratified works better than most_frequent (used for SemEval).
+        BernoulliNB(),
+        MultinomialNB(),
+#        LogisticRegression(C=1e5),
+#        SGDClassifier(max_iter=5, tol=None),
+#        LinearSVC(),
+#        MLPClassifier(),
+    ]
 
-CLASSIFIERS = [
-    DummyClassifier(strategy='most_frequent'),  # Stratified works better than most_frequent (used for SemEval).
-    BernoulliNB(),
-    MultinomialNB(),
-    LogisticRegression(C=1e5),
-    SGDClassifier(max_iter=5, tol=None),
-    LinearSVC(),
-    MLPClassifier(),
-]
+    df_f1_scores = pd.DataFrame(columns=['classifier', 'f1_score'])
 
-f1_means = []
-f1_stds = []
+    f1_means = []
+    f1_stds = []
 
-for i, classifier in enumerate(CLASSIFIERS):
-    print(type(classifier).__name__)
+    for i, classifier in enumerate(CLASSIFIERS):
+        print(type(classifier).__name__)
 
-    scores = cross_val_score(classifier, vectorized_trainset_data, training_labels, cv=5, scoring='f1_weighted')
-    f1_means.append(scores.mean())
-    f1_stds.append(scores.std())
-    print('\tXval F1: {} (+/- {})'.format(scores.mean(), scores.std() * 2))
+        scores = cross_val_score(classifier, vectorized_trainset_data, training_labels, cv=5, scoring='f1_weighted')
+        f1_means.append(scores.mean())
+        f1_stds.append(scores.std())
+        print('\tXval F1: {} (+/- {})'.format(scores.mean(), scores.std() * 2))
 
-    classifier.fit(vectorized_trainset_data, training_labels)
-    print('\tTest F1: {}'.format(f1_score(testing_labels, classifier.predict(vectorized_testset_data), average='weighted')))
+        classifier.fit(vectorized_trainset_data, training_labels)
+        score = f1_score(testing_labels, classifier.predict(vectorized_testset_data), average='weighted')
+        print('\tTest F1: {}'.format(score))
 
+        df_f1_scores.loc[i] = [type(classifier).__name__, score]
+    with open(output_fp, 'a') as f:
+        df_f1_scores.to_csv(f, index=False, header=False)
 
 ################################################
 # Plot the results.
@@ -94,3 +107,6 @@ for i, classifier in enumerate(CLASSIFIERS):
 
 #cm = metrics.confusion_matrix(testing_labels, predictions)
 #print(cm)
+
+if __name__ == '__main__':
+    Fire(main)
