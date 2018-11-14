@@ -48,7 +48,7 @@ From: nvidia/cuda:9.0-base-ubuntu16.04
     cp /usr/share/doc/libnccl2/NCCL-SLA.txt /usr/local/cuda/
     
   add-apt-repository ppa:deadsnakes/ppa && apt-get update && apt-get install -y --no-install-recommends \
-    python3.6 \
+    python3.6-tk \
     
   curl -fSsL -O https://bootstrap.pypa.io/get-pip.py && \
     python3.6 get-pip.py && \
@@ -91,6 +91,7 @@ From: nvidia/cuda:9.0-base-ubuntu16.04
     Keras-Applications==1.0.2 \
     Keras-Preprocessing==1.0.1 \
     Markdown==2.6.11 \
+    matplotlib \
     numpy==1.14.5 \
     pandas==0.22.0 \
     protobuf==3.6.0 \
