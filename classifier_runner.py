@@ -48,10 +48,10 @@ def main(trainset_fp,
         DummyClassifier(strategy='most_frequent'),  # Stratified works better than most_frequent (used for SemEval).
         BernoulliNB(),
         MultinomialNB(),
-#        LogisticRegression(C=1e5),
-#        SGDClassifier(max_iter=5, tol=None),
-#        LinearSVC(),
-#        MLPClassifier(),
+        LogisticRegression(C=1e5),
+        SGDClassifier(max_iter=5, tol=None),
+        LinearSVC(),
+        MLPClassifier(),
     ]
 
     df_f1_scores = pd.DataFrame(columns=['classifier', 'f1_score'])
