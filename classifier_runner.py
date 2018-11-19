@@ -52,6 +52,7 @@ def main(trainset_fp,
         SGDClassifier(max_iter=5, tol=None),
         LinearSVC(),
         MLPClassifier(),
+
     ]
 
     df_f1_scores = pd.DataFrame(columns=['classifier', 'f1_score'])

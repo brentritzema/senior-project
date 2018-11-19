@@ -21,8 +21,8 @@ def main(results_csv):
     ax.set_yticklabels([type(x).__name__ for x in CLASSIFIERS])
     plt.gca().invert_yaxis()
     ax.set_xlim(0.0, 1.0)
-    ax.set_xlabel('Stance XVal F1-Weighted Score')
-    ax.set_title('Classifiers for the SemEval 2016 Task A Dataset')
+    ax.set_xlabel('Stance F1-Weighted Score')
+    ax.set_title('Classifiers using the Jan2010-Jul2018 Dataset')
 
     def autolabel(rects):
         for rect in rects:
