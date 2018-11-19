@@ -96,7 +96,7 @@ fi
 touch ${output_fp}
 
 # RUN
-classifier_runner 2
+classifier_runner 5
 
 sorted_fp=$(echo $output_fp | sed "s/.csv/-sorted.csv/")
 echo $(sort ${output_fp} > ${sorted_fp}) > ${output_fp}

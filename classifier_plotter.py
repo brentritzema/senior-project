@@ -1,13 +1,38 @@
+import matplotlib as mpl
+mpl.use('Agg')
 import matplotlib.pyplot as plt
 
 import numpy as np
 import pandas as pd
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.pipeline import Pipeline
+from sklearn.dummy import DummyClassifier
+from sklearn.naive_bayes import BernoulliNB, MultinomialNB
+from sklearn.linear_model import LogisticRegression, SGDClassifier, SGDRegressor, PassiveAggressiveClassifier
+from sklearn.svm import SVC, LinearSVC
+from sklearn.neural_network import MLPClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import Perceptron
+from sklearn.model_selection import cross_val_score
 
 from fire import Fire
 
 def main(results_csv):
     ###############################################
     #Plot the results.
+
+    CLASSIFIERS = [
+        DummyClassifier(strategy='most_frequent'),  # Stratified works better than most_frequent (used for SemEval).
+        BernoulliNB(),
+        MultinomialNB(),
+        LogisticRegression(C=1e5),
+        SGDClassifier(max_iter=5, tol=None),
+        LinearSVC(),
+        MLPClassifier(),
+	SVC(),
+	RandomForestClassifier(),
+	PassiveAggresiveClassifier(),
+    ]
 
     df_results = pd.read_csv(results_csv)
 
@@ -33,8 +58,8 @@ def main(results_csv):
     autolabel(bars)
 
     plt.tight_layout()
-    plt.show()
-
+    #plt.show()
+    plt.savefig("results.png")
 
 if __name__ == '__main__':
     Fire(main)
