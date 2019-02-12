@@ -22,22 +22,22 @@ def main(results_csv):
     #Plot the results.
 
     CLASSIFIERS = [
-        DummyClassifier(strategy='most_frequent'),  # Stratified works better than most_frequent (used for SemEval).
         BernoulliNB(),
-        MultinomialNB(),
-        LogisticRegression(C=1e5),
-        SGDClassifier(max_iter=5, tol=None),
+        DummyClassifier(strategy='most_frequent'),  # Stratified works better than most_frequent (used for SemEval).
         LinearSVC(),
+        LogisticRegression(C=1e5),
         MLPClassifier(),
-	SVC(),
+        MultinomialNB(),
+#	PassiveAggresiveClassifier(),
 	RandomForestClassifier(),
-	PassiveAggresiveClassifier(),
+        SGDClassifier(max_iter=5, tol=None),
+	SVC()
     ]
 
     df_results = pd.read_csv(results_csv)
 
     f1_means = df_results['f1_score']
-    f1_stds = df_results['sd']
+    f1_stds = df_results['f1_sd']
 
     _, ax = plt.subplots(figsize=(8, max(len(f1_means), 1.5)))
     y_pos = np.arange(len(f1_means))
